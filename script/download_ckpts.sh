@@ -1,0 +1,1 @@
+huggingface-cli download ztlan/SmartDJ --local-dir pretrained_models --local-dir-use-symlinks False

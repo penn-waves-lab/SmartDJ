@@ -21,15 +21,23 @@ bash script/download_ckpts.sh
 ```
 
 
-
 ## ⚡ Inference
-We use `sp_size` for sequence parallel, which denotes the number of GPUs used for one sequence. Input views and generated Gaussians will be evenly distributed to `sp_size` GPUs. `sp_size` should be divisible by total number of GPUs you use.
+
+### Gradio Interactive Demo
+
+Launch the interactive audio editor with a web-based UI:
+
 ```bash
-# For Full model
-bash script/inference_dl3dv.sh
-# For AR model (4 views per chunk, set by '-s model.miniupdate_views')
-bash script/inference_dl3dv_ar.sh
+./script/launch_gradio_editor.sh
 ```
+
+#### Demo Usage
+
+<video width="100%" controls>
+  <source src="media/smartdj_editor_gradio_demo.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
 
 ## Todo
 - [x] Release inference code for SmartDJ-Editor (diffusion editor)
