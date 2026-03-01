@@ -28,16 +28,15 @@ bash script/download_ckpts.sh
 Launch the interactive audio editor with a web-based UI:
 
 ```bash
-./script/launch_gradio_editor.sh
+bash ./script/launch_gradio_editor.sh
 ```
 
 #### Demo Usage
 
-<video width="100%" controls>
-  <source src="media/smartdj_editor_gradio_demo.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+Demo video:
+![image](media/demo_video.png)
 
+[▶️ Watch the demo video](media/smartdj_editor_gradio_demo.mp4)
 
 ## Todo
 - [x] Release inference code for SmartDJ-Editor (diffusion editor)
@@ -57,3 +56,4 @@ If you find this work helpful, please consider citing our paper:
   year={2025}
 }
 ```
+

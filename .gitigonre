@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+*.pyc
 
 # Jupyter
 .ipynb_checkpoints/
@@ -21,3 +22,4 @@ examples/
 
 # Gradio temp files
 *.gradio
+.gradio/

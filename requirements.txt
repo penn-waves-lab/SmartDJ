@@ -24,3 +24,5 @@ ftfy
 pydub
 einops_exts
 gradio
+matplotlib
+git+https://github.com/descriptinc/audiotools

@@ -4,7 +4,8 @@ from .dac import DAC
 from scipy.io import wavfile
 import librosa
 import numpy as np
-from stable_vae import load_vae
+from vae_modules.stable_vae import load_vae
+
 
 class Autoencoder(nn.Module):
     def __init__(self, ckpt_path, model_type='stable_vae', quantization_first=True, config_file=None):
