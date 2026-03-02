@@ -33,10 +33,8 @@ bash ./script/launch_gradio_editor.sh
 
 #### Demo Usage
 
-Demo video:
-![image](media/demo_video.png)
+https://github.com/user-attachments/assets/c2b364b7-3396-4e95-9807-96ee475fd1be
 
-[▶️ Watch the demo video](media/smartdj_editor_gradio_demo.mp4)
 
 ## Todo
 - [x] Release inference code for SmartDJ-Editor (diffusion editor)
