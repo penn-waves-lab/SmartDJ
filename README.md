@@ -44,42 +44,21 @@ Alternatively, you can also use the command line interactive demo for the SmartD
 bash ./script/interactive_edit_editor.sh
 ```
 
-
 <strong>🛠️ Available Commands</strong>
 
-We support the following editing commands. And the supported spatial location includes {left | left front | front | right front | right}
+We support the following editing commands.  
+**Spatial locations:** {`left` | `left front` | `front` | `right front` | `right`}
 
-❌ Remove Sound:
-
-remove the sound of [sound event] at the [spacial location]
-
-➕ Add Sound:
-
-add the sound of [sound event] at the [spacial location] with [xx] dB
-
-🎯 Extract Sound:
-
-extract the sound of [sound event] at the [spacial location]
-
-🔊 Change Volume:
-
-turn [up | down] the volume of [sound event] at [spacial location] by [xx] dB
-
-🧭 Change Direction:
-
-change the sound of [sound event] at [original position] to [spacial location]
-
-⏱️ Shift Sound Timing:
-
-shift the sound of [sound event] at the [spacial location] by [xx] seconds
-
-🌊 Add Reverberation:
-
-reverb the sound of [sound event] at the [spacial location] with reverb level [xx]
-
-🎨 Change Timbre:
-
-change the timbre of the sound of [sound event] at the [spacial location] to be more [bright | dark | warm | cold | muffled]
+| Operation | Command |
+|----------|--------|
+| ❌ **Remove Sound** | `remove the sound of [sound event] at the {spacial location}` |
+| ➕ **Add Sound** | `add the sound of [sound event] at the {spacial location} with [xx] dB` |
+| 🎯 **Extract Sound** | `extract the sound of [sound event] at the {spacial location}` |
+| 🔊 **Change Volume** | `turn {up \| down} the volume of [sound event] at {spacial location} by [xx] dB` |
+| 🧭 **Change Direction** | `change the sound of [sound event] at [original position] to {spacial location}` |
+| ⏱️ **Shift Sound Timing** | `shift the sound of [sound event] at the {spacial location} by [xx] seconds` |
+| 🌊 **Add Reverberation** | `reverb the sound of [sound event] at the {spacial location} with reverb level [xx]` |
+| 🎨 **Change Timbre** | `change the timbre of the sound of [sound event] at the {spacial location} to be more {bright \| dark \| warm \| cold \| muffled}` |
 
 
 ## Todo
