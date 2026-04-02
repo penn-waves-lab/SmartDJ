@@ -35,9 +35,50 @@ bash ./script/launch_gradio_editor.sh
 
 https://github.com/user-attachments/assets/c2b364b7-3396-4e95-9807-96ee475fd1be
 
+### Command Line Interactive Demo for Audio Editor
+Alternatively, you can also use the command line interactive demo for the SmartDJ-Editor
+
+```bash
+bash ./script/interactive_edit_editor.sh
+```
+
+<strong>🛠️ Available Commands</strong>
+
+❌ Remove Sound:
+
+remove the sound of [sound event] at the [left | left front | front | right front | right]
+
+➕ Add Sound:
+
+add the sound of [sound event] at the [left | left front | front | right front | right] with [xx] dB
+
+🎯 Extract Sound:
+
+extract the sound of [sound event] at the [left | left front | front | right front | right]
+
+🔊 Change Volume:
+
+turn [up | down] the volume of [sound event] at [left | left front | front | right front | right] by [xx] dB
+
+🧭 Change Direction:
+
+change the sound of [sound event] at [original position] to [left | left front | front | right front | right]
+
+⏱️ Shift Sound Timing:
+
+shift the sound of [sound event] at the [left | left front | front | right front | right] by [xx] seconds
+
+🌊 Add Reverberation:
+
+reverb the sound of [sound event] at the [left | left front | front | right front | right] with reverb level [xx]
+
+🎨 Change Timbre:
+
+change the timbre of the sound of [sound event] at the [left | left front | front | right front | right] to be more [bright | dark | warm | cold | muffled]
+
 
 ## Todo
-- [x] Release inference code for SmartDJ-Editor (diffusion editor)
+- [x] Release inference code and weight for SmartDJ-Editor (diffusion editor)
 - [ ] Release inference code for SmartDJ-Planer (ALM planer)
 - [ ] Release dataset synthesis pipeline
 
