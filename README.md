@@ -16,6 +16,8 @@ pip install -r requirements.txt
 ```
 
 ## 🤖 Pretrained Models
+Download the pretrained SmartDJ-Editor here for interactive editing
+
 ```bash
 bash script/download_ckpts.sh
 ```
@@ -42,39 +44,42 @@ Alternatively, you can also use the command line interactive demo for the SmartD
 bash ./script/interactive_edit_editor.sh
 ```
 
+
 <strong>🛠️ Available Commands</strong>
+
+We support the following editing commands. And the supported spatial location includes {left | left front | front | right front | right}
 
 ❌ Remove Sound:
 
-remove the sound of [sound event] at the [left | left front | front | right front | right]
+remove the sound of [sound event] at the [spacial location]
 
 ➕ Add Sound:
 
-add the sound of [sound event] at the [left | left front | front | right front | right] with [xx] dB
+add the sound of [sound event] at the [spacial location] with [xx] dB
 
 🎯 Extract Sound:
 
-extract the sound of [sound event] at the [left | left front | front | right front | right]
+extract the sound of [sound event] at the [spacial location]
 
 🔊 Change Volume:
 
-turn [up | down] the volume of [sound event] at [left | left front | front | right front | right] by [xx] dB
+turn [up | down] the volume of [sound event] at [spacial location] by [xx] dB
 
 🧭 Change Direction:
 
-change the sound of [sound event] at [original position] to [left | left front | front | right front | right]
+change the sound of [sound event] at [original position] to [spacial location]
 
 ⏱️ Shift Sound Timing:
 
-shift the sound of [sound event] at the [left | left front | front | right front | right] by [xx] seconds
+shift the sound of [sound event] at the [spacial location] by [xx] seconds
 
 🌊 Add Reverberation:
 
-reverb the sound of [sound event] at the [left | left front | front | right front | right] with reverb level [xx]
+reverb the sound of [sound event] at the [spacial location] with reverb level [xx]
 
 🎨 Change Timbre:
 
-change the timbre of the sound of [sound event] at the [left | left front | front | right front | right] to be more [bright | dark | warm | cold | muffled]
+change the timbre of the sound of [sound event] at the [spacial location] to be more [bright | dark | warm | cold | muffled]
 
 
 ## Todo
