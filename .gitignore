@@ -1,15 +1,49 @@
-# Python
+# Python cache
 __pycache__/
 *.py[cod]
-*.pyo
+*$py.class
+*.pyc
 
-# Gradio cache
-.gradio/
+# Jupyter
+.ipynb_checkpoints/
 
-# Model checkpoints (large binaries — download separately)
-pretrained_models
-pretrained_models/
-*.ckpt
-*.pt
+# Model weights / checkpoints
 *.pth
-*.bin
+*.pt
+*.ckpt
+*.safetensors
+
+# Experiment artifacts
+wandb/
+logs/
+ckpt/
+pretrained_models/
+examples/
+
+# Gradio temp files
+*.gradio
+.gradio/# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Model weights / checkpoints
+*.pth
+*.pt
+*.ckpt
+*.safetensors
+
+# Experiment artifacts
+wandb/
+logs/
+ckpt/
+pretrained_models/
+examples/
+
+# Gradio temp files
+*.gradio
+.gradio/
