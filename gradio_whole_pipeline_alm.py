@@ -97,43 +97,6 @@ PIPELINE_CSS = """
 .step-empty {min-height: 180px; display: flex; align-items: center; justify-content: center; color: #6b7280; border: 1px dashed #cbd5e1; border-radius: 12px; background: #f8fafc;}
 """
 
-INTERNAL_DEMO_SOURCES = {
-    "example_001.wav": [
-        "gentle click-clock",
-        "woman speech and laugh",
-        "wind noise",
-    ],
-    "example_002.wav": [
-        "sewing machining",
-        "child laugh",
-        "man and woman laugh",
-    ],
-    "example_003.wav": [
-        "church bell ring",
-        "motorcycle rev",
-    ],
-    "example_004.wav": [
-        "person snore",
-        "helicopter engine",
-    ],
-    "example_005.wav": [
-        "rain fall",
-        "bird chirp",
-    ],
-    "example_006.wav": [
-        "motorboat engine rev",
-        "keyboard type",
-    ],
-    "example_007.wav": [
-        "baby cry",
-        "boat engine run",
-    ],
-    "bird_chirp_car.wav": [
-        "bird chirp",
-        "car engine sound",
-    ],
-}
-
 
 class GeminiPlannerClient:
     def __init__(self, api_key, model, base_url="https://generativelanguage.googleapis.com/v1beta"):
@@ -350,9 +313,9 @@ def handle_audio_change(audio_file):
     )
 
 
-def generate_plan_for_ui(audio_file, complex_instruction, demo_key=""):
+def generate_plan_for_ui(audio_file, complex_instruction):
     """Generate planning outputs without returning planner-status text."""
-    _, plan_rows, raw_output, _ = generate_plan(audio_file, complex_instruction, demo_key)
+    _, plan_rows, raw_output, _ = generate_plan(audio_file, complex_instruction)
     return plan_rows, raw_output
 
 
@@ -390,18 +353,6 @@ def parse_sound_sources_input(sound_sources_text):
             sources.append(value)
     return sources
 
-
-def get_internal_sound_sources(audio_file, demo_key=""):
-    # Primary: use the explicit demo key passed from the UI state.
-    if demo_key:
-        sources = INTERNAL_DEMO_SOURCES.get(demo_key.strip().lower(), [])
-        if sources:
-            return sources
-    # Secondary: try basename match (works if Gradio preserved the original name).
-    if not audio_file:
-        return []
-    filename = os.path.basename(audio_file).strip().lower()
-    return INTERNAL_DEMO_SOURCES.get(filename, [])
 
 
 def parse_add_instruction(instruction):
@@ -539,63 +490,47 @@ def planner_json_to_step_rows(planner_json):
     return ordered_rows
 
 
-def call_gemini_audio_planner(audio_file, complex_instruction, known_sources=None):
-    """Run Gemini ALM for edit-plan generation.
-
-    If *known_sources* is provided (e.g. for internal demo files), the audio
-    understanding stage is skipped and the supplied sources are used directly.
-    Otherwise the full two-stage pipeline (audio analysis → edit planning) is
-    executed with the given *audio_file*.
-    """
+def call_gemini_audio_planner(audio_file, complex_instruction):
+    """Run two-stage Gemini ALM: audio understanding, then edit-plan generation."""
     global GEMINI_CLIENT
 
     if GEMINI_CLIENT is None:
         raise RuntimeError("Gemini planner client is not configured.")
 
-    if known_sources:
-        # Skip audio analysis — use pre-supplied metadata directly.
-        detected_sources = list(known_sources)
-        analysis_json = {
-            "audio_summary": f"Internal demo audio with known sources: {', '.join(detected_sources)}.",
-            "sound_sources": detected_sources,
-        }
-        analysis_raw_response = {"note": "Skipped — internal demo sources used directly."}
-        print(f"Using internal sources (no audio analysis): {detected_sources}")
-    else:
-        analysis_payload = {
-            "task": "analyze_audio_scene",
-            "return_fields": ["audio_summary", "sound_sources", "uncertain_sources"],
-        }
+    analysis_payload = {
+        "task": "analyze_audio_scene",
+        "return_fields": ["audio_summary", "sound_sources", "uncertain_sources"],
+    }
 
-        analysis_schema = {
-            "type": "OBJECT",
-            "properties": {
-                "audio_summary": {"type": "STRING"},
-                "sound_sources": {"type": "ARRAY", "items": {"type": "STRING"}},
-                "uncertain_sources": {"type": "ARRAY", "items": {"type": "STRING"}},
-            },
-            "required": ["audio_summary", "sound_sources"],
-        }
+    analysis_schema = {
+        "type": "OBJECT",
+        "properties": {
+            "audio_summary": {"type": "STRING"},
+            "sound_sources": {"type": "ARRAY", "items": {"type": "STRING"}},
+            "uncertain_sources": {"type": "ARRAY", "items": {"type": "STRING"}},
+        },
+        "required": ["audio_summary", "sound_sources"],
+    }
 
-        print("Calling Gemini for audio analysis...")
+    print("Calling Gemini for audio analysis...")
 
-        analysis_json, analysis_raw_response = GEMINI_CLIENT.generate_json(
-            prompt_text=GEMINI_AUDIO_ANALYSIS_PROMPT,
-            user_payload=analysis_payload,
-            audio_file=audio_file,
-            temperature=0.1,
-            timeout=90,
-            response_schema=analysis_schema,
-        )
+    analysis_json, analysis_raw_response = GEMINI_CLIENT.generate_json(
+        prompt_text=GEMINI_AUDIO_ANALYSIS_PROMPT,
+        user_payload=analysis_payload,
+        audio_file=audio_file,
+        temperature=0.1,
+        timeout=90,
+        response_schema=analysis_schema,
+    )
 
-        print(analysis_json)
+    print(analysis_json)
 
-        detected_sources = _normalize_source_list(analysis_json.get("sound_sources", []))
-        if not detected_sources:
-            detected_sources = _normalize_source_list(analysis_json.get("uncertain_sources", []))
+    detected_sources = _normalize_source_list(analysis_json.get("sound_sources", []))
+    if not detected_sources:
+        detected_sources = _normalize_source_list(analysis_json.get("uncertain_sources", []))
 
-        if not detected_sources:
-            raise ValueError("Gemini did not return usable sound_sources from audio analysis.")
+    if not detected_sources:
+        raise ValueError("Gemini did not return usable sound_sources from audio analysis.")
 
     planning_payload = {
         "sound_sources": detected_sources,
@@ -644,7 +579,7 @@ def call_gemini_audio_planner(audio_file, complex_instruction, known_sources=Non
 
 
 @torch.no_grad()
-def generate_plan(audio_file, complex_instruction, demo_key=""):
+def generate_plan(audio_file, complex_instruction):
     """Run Gemini ALM planner using audio understanding + high-level instruction."""
     if PIPELINE_MODELS is None:
         status, plan_rows, raw_output, *_ = clear_pipeline_outputs()
@@ -658,17 +593,12 @@ def generate_plan(audio_file, complex_instruction, demo_key=""):
         status, plan_rows, raw_output, *_ = clear_pipeline_outputs()
         return "❌ Please enter a high-level editing request.", plan_rows, raw_output, ""
 
-    internal_sources = get_internal_sound_sources(audio_file, demo_key)
     print("Audio file for planning:", audio_file)
-
     print("Run planner with instruction:", complex_instruction)
-    if internal_sources:
-        print(f"Internal demo detected — skipping audio analysis, using known sources: {internal_sources}")
     try:
         planner_json, analysis_json, analysis_raw_response, planner_raw_response = call_gemini_audio_planner(
             audio_file=audio_file,
             complex_instruction=complex_instruction.strip(),
-            known_sources=internal_sources if internal_sources else None,
         )
         plan_rows = planner_json_to_step_rows(planner_json)
 
@@ -1058,51 +988,42 @@ def create_gradio_interface():
                         placeholder="Example: Make this sound like in a busy coffee shop.",
                         info="Describe the overall edit in natural language. ALM will generate structured steps.",
                     )
-                    demo_key_state = gr.State(value="")
                     gr.Examples(
                         examples=[
                             [
                                 "./demo_audios_whole_pipeline/example_001.wav",
                                 "Make it sound like in a beach.",
-                                "example_001.wav",
                             ],
                             [
                                 "./demo_audios_whole_pipeline/example_002.wav",
                                 "Make this sounds like a warm family time in a lively spring park.",
-                                "example_002.wav",
                             ],
                             [
                                 "./demo_audios_whole_pipeline/example_003.wav",
                                 "Make this sound like a race car competition.",
-                                "example_003.wav",
                             ],
                             [
                                 "./demo_audios_whole_pipeline/example_004.wav",
                                 "Make this sound like mountain cabin atmosphere",
-                                "example_004.wav",
                             ],
                             [
                                 "./demo_audios_whole_pipeline/example_005.wav",
                                 "Make this sound like a sunny day",
-                                "example_005.wav",
                             ],
                             [
                                 "./demo_audios_whole_pipeline/example_006.wav",
                                 "Make this sound like a busy office",
-                                "example_006.wav",
                             ],
                             [
                                 "./demo_audios_whole_pipeline/example_007.wav",
                                 "Make this sound like in a lively spring park.",
-                                "example_007.wav",
                             ],
                             [
                                 "./demo_audios_whole_pipeline/bird_chirp_car.wav",
                                 "Make this sound like in a spring forest.",
-                                "bird_chirp_car.wav",
                             ],
                         ],
-                        inputs=[input_audio, complex_instruction, demo_key_state],
+                        inputs=[input_audio, complex_instruction],
                         label="Example source audios",
                     )
                     with gr.Row():
@@ -1174,16 +1095,9 @@ def create_gradio_interface():
             ],
         )
 
-        # Clear the demo key when the user uploads a file manually (not from Examples).
-        input_audio.upload(
-            fn=lambda: "",
-            inputs=[],
-            outputs=[demo_key_state],
-        )
-
         generate_plan_btn.click(
             fn=generate_plan_for_ui,
-            inputs=[input_audio, complex_instruction, demo_key_state],
+            inputs=[input_audio, complex_instruction],
             outputs=[plan_steps, raw_output],
         )
         

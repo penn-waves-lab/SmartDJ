@@ -27,6 +27,13 @@ bash script/download_ckpts.sh
 
 ### Gradio Interactive Demo
 
+Launch the SmartDJ whole pipeline with a web-based UI using gemini API:
+
+```bash
+bash ./script/launch_gradio_whole_pipeline_alm.sh
+```
+
+
 Launch the interactive audio editor with a web-based UI:
 
 ```bash
@@ -63,7 +70,7 @@ We support the following editing commands.
 
 ## Todo
 - [x] Release inference code and weight for SmartDJ-Editor (diffusion editor)
-- [ ] Release inference code for SmartDJ-Planer (ALM planer)
+- [x] Release inference code for SmartDJ-Planer (ALM planer, with gemini api)
 - [ ] Release dataset synthesis pipeline
 
 
@@ -77,6 +84,15 @@ If you find this work helpful, please consider citing our paper:
   author={Lan, Zitong and Hao, Yiduo and Zhao, Mingmin},
   journal={arXiv preprint arXiv:2509.21625},
   year={2025}
+}
+
+@inproceedings{
+lan2026smartdj,
+title={Smart{DJ}: Declarative Audio Editing with Audio Language Model},
+author={Zitong Lan and Yiduo Hao and Mingmin Zhao},
+booktitle={The Fourteenth International Conference on Learning Representations},
+year={2026},
+url={https://openreview.net/forum?id=eNmANCkefl}
 }
 ```
 

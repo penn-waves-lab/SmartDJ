@@ -164,7 +164,7 @@ if __name__ == "__main__":
     parser.add_argument("--diffusion-ckpt", type=str, default="./pretrained_models/smartdj_editor.pt")
     parser.add_argument("--diffusion-config", type=str, default="./config/diffusion/AudioEdit.yaml")
 
-    parser.add_argument("--autoencoder-ckpt", type=str, default="./pretrained_models/audio_vae.pt")
+    parser.add_argument("--autoencoder-ckpt", type=str, default="./pretrained_models/24k_mono_latent64.ckpt")
     parser.add_argument("--autoencoder-config", type=str, default="../config/vae/24k_mono_latent64.json")
 
     parser.add_argument("--guidance-scale", type=float, default=0.0)
