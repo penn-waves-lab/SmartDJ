@@ -17,7 +17,6 @@ import soundfile as sf
 from transformers import T5Tokenizer, T5EncoderModel
 from diffusers import DDIMScheduler
 
-from utils.audio_utils import save_audio
 from editor_model.inference import rescale_noise_cfg
 from editor_model.udit import UDiT
 from vae_modules.autoencoder_wrapper import Autoencoder

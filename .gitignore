@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Gradio cache
+.gradio/
+
+# Model checkpoints (large binaries — download separately)
+pretrained_models
+pretrained_models/
+*.ckpt
+*.pt
+*.pth
+*.bin
